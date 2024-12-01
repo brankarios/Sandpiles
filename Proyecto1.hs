@@ -25,12 +25,6 @@ instance {-# OVERLAPPING #-} Show [[Int]] where
 
 -- Parte 2: Logica de colapso
 
-searchElementInArray :: Int -> [Int] -> Int
-searchElementInArray _ [] = -1
-searchElementInArray i (x:xs)
-  | x >= 4    = i
-  | otherwise = searchElementInArray (i + 1) xs
-
 searchElementInMatrix :: Int -> [[Int]] -> (Int, Int)
 searchElementInMatrix _ [] = (-1, -1)
 searchElementInMatrix row (x:xs)
@@ -39,13 +33,28 @@ searchElementInMatrix row (x:xs)
   where
     col = searchElementInArray 0 x
 
+searchElementInArray :: Int -> [Int] -> Int
+searchElementInArray _ [] = -1
+searchElementInArray i (x:xs)
+  | x >= 4    = i
+  | otherwise = searchElementInArray (i + 1) xs
+
+--modifyNeighbourInMatrix :: (Int, Int) -> Int -> [[Int]] -> [[Int]]
+--modifyNeighbourInMatrix (i, j) row a = 
+
+modifyNeighbourInArray :: Int-> Int -> [Int] -> [Int]
+modifyNeighbourInArray _ _ [] = []
+modifyNeighbourInArray nrow i (x:xs)
+  | i == nrow    = (x+1):xs
+  | otherwise = x: modifyNeighbourInArray nrow (i + 1) xs
 
 main :: IO ()
 main = do
 
     let matrix = initMatrix 3 20 (1, 1)
-    let result = searchElementInMatrix 0 matrix 
-    putStrLn $ "El primer elemento mayor o igual a 4 esta en: " ++ show result
+    let array = [1, 2, 3, 4, 5] 
+    let modifiedArray = modifyNeighbourInArray 2 0 array 
+    print modifiedArray
 
 
 {- Idea para collapse step
