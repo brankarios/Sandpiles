@@ -39,22 +39,29 @@ searchElementInArray i (x:xs)
   | x >= 4    = i
   | otherwise = searchElementInArray (i + 1) xs
 
---modifyNeighbourInMatrix :: (Int, Int) -> Int -> [[Int]] -> [[Int]]
---modifyNeighbourInMatrix (i, j) row a = 
+modifyNeighbourInMatrix :: (Int, Int) -> Int -> [[Int]] -> [[Int]] -> [[Int]]
+modifyNeighbourInMatrix (_, _) _ [] m = []
+modifyNeighbourInMatrix (i, j) row (x:xs) m
+  | row == i-1 = modifyNeighbourInArray j 0 1 x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
+  | row == i = modifyNeighbourInArray (j+1) 0 1 (modifyNeighbourInArray (j-1) 0 1 (modifyNeighbourInArray j 0 (-4) x)) : modifyNeighbourInMatrix (i,j) (row + 1) xs m
+  | row == i+1 = modifyNeighbourInArray j 0 1 x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
+  | otherwise = x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
 
-modifyNeighbourInArray :: Int-> Int -> [Int] -> [Int]
-modifyNeighbourInArray _ _ [] = []
-modifyNeighbourInArray nrow i (x:xs)
-  | i == nrow    = (x+1):xs
-  | otherwise = x: modifyNeighbourInArray nrow (i + 1) xs
+modifyNeighbourInArray :: Int -> Int -> Int -> [Int] -> [Int]
+modifyNeighbourInArray _ _ _ [] = []
+modifyNeighbourInArray nrow i num (x:xs)
+  | i == nrow    = (x+num):xs
+  | otherwise = x: modifyNeighbourInArray nrow (i + 1) num xs
 
+collapseStep :: [[Int]] -> [[Int]]
+collapseStep m = modifyNeighbourInMatrix (searchElementInMatrix 0 m) 0 m m
 main :: IO ()
 main = do
-
-    let matrix = initMatrix 3 20 (1, 1)
-    let array = [1, 2, 3, 4, 5] 
-    let modifiedArray = modifyNeighbourInArray 2 0 array 
-    print modifiedArray
+  
+  let matrix = initMatrix 2 8 (0, 0)
+  print matrix
+  let modifiedMatrix = collapseStep matrix
+  print modifiedMatrix
 
 
 {- Idea para collapse step
