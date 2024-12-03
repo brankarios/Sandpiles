@@ -55,20 +55,36 @@ modifyNeighbourInArray nrow i num (x:xs)
 
 collapseStep :: [[Int]] -> [[Int]]
 collapseStep m = modifyNeighbourInMatrix (searchElementInMatrix 0 m) 0 m m
+
+-- Parte 3: Simulación Completa -- 
+
+sandpilesSimulate :: [[Int]] -> [[Int]]
+sandpilesSimulate matrix
+  | searchElementInMatrix 0 matrix == (-1,-1) = matrix
+  | otherwise = sandpilesSimulate (collapseStep matrix)
+
+printMatrixSteps :: [[Int]] -> IO ()
+printMatrixSteps matrix
+  | searchElementInMatrix 0 matrix == (-1, -1) = print matrix
+  | otherwise =
+    do
+      print matrix
+      let nextMatrix = collapseStep matrix
+      printMatrixSteps nextMatrix
+
+-- Parte 4: Suma de Sandpiles
+
+sandpilesSum :: [[Int]] -> [[Int]] -> [[Int]]
+sandpilesSum a b = [[x + y | (x,y) <- zip ai bi] | (ai,bi) <- zip a b]
+
+
 main :: IO ()
 main = do
-  
-  let matrix = initMatrix 2 8 (0, 0)
-  print matrix
-  let modifiedMatrix = collapseStep matrix
-  print modifiedMatrix
 
-
-{- Idea para collapse step
-
-1. Recorremos la matriz en busca del primer elemento que tenga 4 o más granos.
-2. Almacenamos sus coordenadas (i,j).
-3. Conociendo sus coordenadas, recorremos de nuevo la matriz y modificamos las casillas (i-1, j), (i+1, j), (i, j-1), (i, j+1)
-4. Retornamos la matriz modificada.
-
--}
+  let a = initMatrix 3 20 (1,1)
+  let b = initMatrix 3 10 (1,0)
+  let c = sandpilesSum a b
+  putStrLn "SUMA DE LAS MATRICES"
+  print c
+  putStrLn "PASOS:"
+  printMatrixSteps c
