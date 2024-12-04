@@ -54,37 +54,26 @@ modifyNeighbourInArray nrow i num (x:xs)
   | otherwise = x: modifyNeighbourInArray nrow (i + 1) num xs
 
 collapseStep :: [[Int]] -> [[Int]]
-collapseStep m = modifyNeighbourInMatrix (searchElementInMatrix 0 m) 0 m m
+collapseStep m = do
+  modifyNeighbourInMatrix (searchElementInMatrix 0 m) 0 m m
 
 -- Parte 3: Simulación Completa -- 
 
-sandpilesSimulate :: [[Int]] -> [[Int]]
-sandpilesSimulate matrix
-  | searchElementInMatrix 0 matrix == (-1,-1) = matrix
-  | otherwise = sandpilesSimulate (collapseStep matrix)
+sandpilesSimulate :: [[Int]] -> IO [[Int]] 
+sandpilesSimulate matrix = do 
+  if searchElementInMatrix 0 matrix == (-1, -1) 
+  then do  
+    return [] 
+    else do 
+      let newMatrix = collapseStep matrix 
+      print newMatrix 
+      sandpilesSimulate newMatrix
 
-printMatrixSteps :: [[Int]] -> IO ()
-printMatrixSteps matrix
-  | searchElementInMatrix 0 matrix == (-1, -1) = print matrix
-  | otherwise =
-    do
-      print matrix
-      let nextMatrix = collapseStep matrix
-      printMatrixSteps nextMatrix
 
 -- Parte 4: Suma de Sandpiles
 
-sandpilesSum :: [[Int]] -> [[Int]] -> [[Int]]
-sandpilesSum a b = [[x + y | (x,y) <- zip ai bi] | (ai,bi) <- zip a b]
-
-
-main :: IO ()
-main = do
-
-  let a = initMatrix 3 20 (1,1)
-  let b = initMatrix 3 10 (1,0)
-  let c = sandpilesSum a b
-  putStrLn "SUMA DE LAS MATRICES"
+sandpilesSum :: [[Int]] -> [[Int]] -> IO [[Int]]
+sandpilesSum a b = do
+  let c = [[x + y | (x,y) <- zip ai bi] | (ai,bi) <- zip a b]
   print c
-  putStrLn "PASOS:"
-  printMatrixSteps c
+  sandpilesSimulate c
