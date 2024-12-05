@@ -1,5 +1,4 @@
-import Debug.Trace (trace)
-
+-- César Carios, 30136117 y Jhonatan Homsany, 30182893 --
 
 -- Parte 1: Inicializacion y visualizacion de la matriz
 
