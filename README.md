@@ -11,7 +11,7 @@ Este proyecto ha sido desarrollado para la asignatura Lenguajes de Programación
 1. Abrir la consola de comandos en la ruta donde ha sido descargado el código fuente.
 2. Escribir el comando _GHCI_ para iniciar el intérprete de Haskell.
 3. Luego de haber iniciado, se podrán introducir comandos al intérprete. Ahora se debe cargar el archivo con el código fuente usando el comando _:l Proyecto1.hs_.
-4. Llegado a este punto, ya se pueden introducir las funciones del código fuente con sus parámetros para ser ejecutadas por separado.
+4. Llegado a este punto, ya se pueden introducir las funciones del código fuente con sus parámetros para ser ejecutadas individualmente.
 
 ### Instancia de Show: Uso de {-# OVERLAPPING #-}
 
