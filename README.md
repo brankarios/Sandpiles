@@ -15,7 +15,7 @@ Este proyecto ha sido desarrollado para la asignatura Lenguajes de Programación
 
 ### Instancia de Show: Uso de {-# OVERLAPPING #-}
 
-Para poder imprimir las matrices con un formato legible, fue necesario crear una instancia de Show. La nueva instancia de Show creada define cómo se debe mostar una lista de listas. Ahora bien, para que esta instancia pudiera ejecutarse sin problemas fue necesario usar en su firma la anotación {-OVERLAPPING-}, esto le indica al compilador que use esa instancia aunque haya otras instancias de Show. Sin esta anotación ocurría un error al intentar imprimir las matrices del programa.
+Para poder imprimir las matrices con un formato legible, fue necesario crear una instancia de Show. La nueva instancia de Show creada define cómo se debe mostar una lista de listas. Ahora bien, para que esta instancia pudiera ejecutarse sin problemas fue necesario usar en su firma la anotación {-OVERLAPPING-}, esto le indica al compilador que use esa instancia aunque haya otras instancias de Show. Sin esta anotación ocurría un error al intentar imprimir las matrices del programa. El uso de OVERLAPPING en este caso fue consultado de la siguiente web https://serokell.io/blog/learn-from-errors-overlapping-instances. Allí describen el problema que teníamos al no usar OVERLAPPING y cómo se resolvía usándolo.
 
 ### Material consultado: Hoogle y Zvon
 
