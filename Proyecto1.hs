@@ -1,3 +1,6 @@
+import Debug.Trace (trace)
+
+
 -- Parte 1: Inicializacion y visualizacion de la matriz
 
 fillArray :: Int -> Int -> Int -> Int -> [Int]
@@ -25,45 +28,43 @@ instance {-# OVERLAPPING #-} Show [[Int]] where
 
 -- Parte 2: Logica de colapso
 
-searchElementInMatrix :: Int -> [[Int]] -> (Int, Int)
-searchElementInMatrix _ [] = (-1, -1)
-searchElementInMatrix row (x:xs)
-  | col /= -1 = (row, col)
-  | otherwise = searchElementInMatrix (row + 1) xs
-  where
-    col = searchElementInArray 0 x
+searchCoordinates :: Int -> Int -> [[Int]] -> [(Int, Int)]
+searchCoordinates _ _ [] = []
+searchCoordinates i _ ([]:xs) = searchCoordinates (i + 1) 0 xs
+searchCoordinates i j ((y:ys):xs) 
+  | y >= 4 = (i, j) : searchCoordinates i (j + 1) (ys:xs)
+  | otherwise = searchCoordinates i (j + 1) (ys:xs)
 
-searchElementInArray :: Int -> [Int] -> Int
-searchElementInArray _ [] = -1
-searchElementInArray i (x:xs)
-  | x >= 4    = i
-  | otherwise = searchElementInArray (i + 1) xs
+passCoordinates :: [(Int, Int)] -> [[Int]] -> [[Int]]
+passCoordinates [] m = m
+passCoordinates (x:xs) m = passCoordinates xs (modifyNeighbourInMatrix x 0 m) 
 
-modifyNeighbourInMatrix :: (Int, Int) -> Int -> [[Int]] -> [[Int]] -> [[Int]]
-modifyNeighbourInMatrix (_, _) _ [] m = []
-modifyNeighbourInMatrix (i, j) row (x:xs) m
-  | row == i-1 = modifyNeighbourInArray j 0 1 x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
-  | row == i = modifyNeighbourInArray (j+1) 0 1 (modifyNeighbourInArray (j-1) 0 1 (modifyNeighbourInArray j 0 (-4) x)) : modifyNeighbourInMatrix (i,j) (row + 1) xs m
-  | row == i+1 = modifyNeighbourInArray j 0 1 x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
-  | otherwise = x : modifyNeighbourInMatrix (i,j) (row + 1) xs m
+modifyNeighbourInMatrix :: (Int, Int) -> Int -> [[Int]] -> [[Int]]
+modifyNeighbourInMatrix (-1, -1) _ _ = []
+modifyNeighbourInMatrix _ _ [] = []
+modifyNeighbourInMatrix (i, j) row (x:xs)
+  | row == i-1 || row == i+1 = modifyNeighbourInArray j 0 1 x : modifyNeighbourInMatrix (i,j) (row + 1) xs
+  | row == i = modifyNeighbourInArray (j+1) 0 1 (modifyNeighbourInArray (j-1) 0 1 (modifyNeighbourInArray j 0 (-4) x)) : modifyNeighbourInMatrix (i,j) (row + 1) xs
+  | otherwise = x : modifyNeighbourInMatrix (i,j) (row + 1) xs
+
 
 modifyNeighbourInArray :: Int -> Int -> Int -> [Int] -> [Int]
 modifyNeighbourInArray _ _ _ [] = []
-modifyNeighbourInArray nrow i num (x:xs)
-  | i == nrow    = (x+num):xs
-  | otherwise = x: modifyNeighbourInArray nrow (i + 1) num xs
+modifyNeighbourInArray column start num (x:xs)
+  | start == column   = (x+num):xs
+  | otherwise = x: modifyNeighbourInArray column (start + 1) num xs
 
 collapseStep :: [[Int]] -> [[Int]]
 collapseStep m = do
-  modifyNeighbourInMatrix (searchElementInMatrix 0 m) 0 m m
+  passCoordinates (searchCoordinates 0 0 m) m 
 
 -- Parte 3: Simulación Completa -- 
 
 sandpilesSimulate :: [[Int]] -> IO [[Int]] 
 sandpilesSimulate matrix = do 
-  if searchElementInMatrix 0 matrix == (-1, -1) 
+  if searchCoordinates 0 0 matrix == [] 
   then do  
-    return [] 
+    return []
     else do 
       let newMatrix = collapseStep matrix 
       print newMatrix 
