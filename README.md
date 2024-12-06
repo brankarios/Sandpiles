@@ -27,4 +27,4 @@ Fue necesario añadir IO a la firma de las funciones _sandpilesSimulate_ y _sand
 
 ### Validaciones en la entrada
 
-Se hicieron validaciones en la función _initMatrix_ para que se mostrara un mensaje de error en el caso de que introdujeran el tamaño de una matriz menor o igual que 0, una cantidad negativa de granos de arena e índices negativos.
+Se hicieron validaciones en la función _initMatrix_ para que se mostrara un mensaje de error en el caso de que introdujeran el tamaño de una matriz menor o igual que 0, una cantidad negativa de granos de arena, índices negativos e índices fuera del alcance del tamaño de la matriz.

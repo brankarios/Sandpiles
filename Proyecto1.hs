@@ -12,7 +12,8 @@ initMatrix :: Int -> Int -> (Int, Int) -> [[Int]]
 initMatrix n g (x, y)
   | n <= 0 = error "El tamaño de la matriz no puede ser menor o igual que cero"
   | g < 0 = error "No se puede tener una cantidad negativa de granos de arena"
-  | x < 0 || y < 0 = error "No se pueden procesar índices negativos en la matrix"
+  | x < 0 || y < 0 = error "No se pueden procesar índices negativos en la matriz"
+  | x >= n || y >= n = error "No se pueden introducir coordenadas fuera del alcance del tamaño de la matriz"
   | otherwise = [fillRow i | i <- [0..n-1]]
   where 
     fillRow i 
