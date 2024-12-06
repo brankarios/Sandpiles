@@ -9,10 +9,14 @@ fillArray n g i c
   | otherwise = 0 : fillArray n g i (c + 1)
 
 initMatrix :: Int -> Int -> (Int, Int) -> [[Int]]
-initMatrix n g (x, y) = [fillRow i | i <- [0..n-1]]
-  where
-    fillRow i
-      | i == x    = fillArray n g y 0
+initMatrix n g (x, y)
+  | n <= 0 = error "El tamaño de la matriz no puede ser menor o igual que cero"
+  | g < 0 = error "No se puede tener una cantidad negativa de granos de arena"
+  | x < 0 || y < 0 = error "No se pueden procesar índices negativos en la matrix"
+  | otherwise = [fillRow i | i <- [0..n-1]]
+  where 
+    fillRow i 
+      | i == x = fillArray n g y 0 
       | otherwise = fillArray n 0 y 0
 
 

@@ -24,3 +24,7 @@ Las páginas webs hoogle.haskell.org y zvon.org fueron de gran utiidad para inve
 ### Modificación de IO en la firma de _sanpilesSimulate_ y _sandpilesSum_
 
 Fue necesario añadir IO a la firma de las funciones _sandpilesSimulate_ y _sandpilesSum_ para poder realizar operaciones de entrada y salida. En este caso, el IO es necesario porque las funciones mencionadas utilizan _print_ para imprimir la nueva matriz en cada iteración, lo cual es una operación de salida.
+
+### Validaciones en la entrada
+
+Se hicieron validaciones en la función _initMatrix_ para que se mostrara un mensaje de error en el caso de que introdujeran el tamaño de una matriz menor o igual que 0, una cantidad negativa de granos de arena e índices negativos.
